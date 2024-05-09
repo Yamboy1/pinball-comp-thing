@@ -1,0 +1,46 @@
+const tournament = $context.form.tournament;
+const player = $context.form.player;
+
+let response;
+let info;
+let games;
+let arenas;
+let error = false;
+
+console.log(tournament, player);
+
+try {
+	// Get list of arenas
+	response = await fetch(`https://app.matchplay.events/api/tournaments/${tournament}?includeArenas=true`);
+	info = (await response.json()).data;
+
+	// Get list of best games for player
+	response = await fetch(`https://app.matchplay.events/api/tournaments/${tournament}/single-player-games${player ? `?player=${player}}` : ""}`);
+	games = (await response.json()).data
+
+	arenas = new Map(info.arenas.map(({arenaId, name}) => [arenaId, {name, count: 0}]));
+	games.forEach(game => arenas.get(game.arenaId)["count"]++);
+} catch {
+	error = true;
+}
+
+<html>
+	<head>
+		<title>Best Game Analyser</title>
+	</head>
+	<body>
+		<form>
+			<input id="tournament" name="tournament" value={tournament} placeholder="Tournament Id"/>
+			<input id="player" name="player" value={player} placeholder="Player Id"/>
+			<button type="submit">Go!</button>
+		</form>
+		<h2 style="color: red" rx-when={error}>An error occurred, please check your tournament id and player id and try again</h2>
+		<div rx-when={!error}>
+			<h1>{info.name}</h1>
+			<h2>Best Games</h2>
+			<ul>
+				<li rx-each={[...arenas.values()]} rx-as="arena">{arena.name}: {arena.count}</li>
+			</ul>
+		</div>
+	</body>
+</html>
