@@ -1,7 +1,10 @@
 {
-    "name": "pinball-comp-thing",
-    "version": "0.0.0",
-    "dependencies": {
-        "@niarada/remedy": "^0.4.7"
-    }
+  "name": "pinball-comp-thing",
+  "version": "0.0.0",
+  "dependencies": {
+    "@niarada/remedy": "^0.4.7"
+  },
+  "scripts": {
+    "compile": "bun build.bun.sh"
+  }
 }

@@ -9,9 +9,9 @@ export default {
         // "tailwind",
         // "htmx",
         // "sse",
-        "markdown",
+        // "markdown",
         // "typescript",
-        "refresh",
+        process.env.NODE_ENV !== "production" && "refresh",
         "template",
         "static",
     ]
